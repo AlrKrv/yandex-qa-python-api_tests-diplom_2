@@ -15,6 +15,10 @@ class TestCreateUser:
         response = requests.post(f'{Urls.MAIN_URL}{Handlers.CREATE_USER}', data=User.create_data_user())
         assert response.status_code == 200 and response.json()["success"] is True
 
+        response = requests.delete(f'{Urls.MAIN_URL}{Handlers.DELETE_USER}',
+                                   headers={"Authorization": f'{response.json()["accessToken"]}'})
+        assert response.status_code == 202 and response.json()["message"] == 'User successfully removed'
+
     @allure.description('При создании дублирующего пользователя срабатывает allert ')
     @allure.title('Создание пользователя который уже есть в системе')
     def test_create_double_user_error(self):
